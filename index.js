@@ -1,15 +1,26 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
 const app = express();
+
+// Enable CORS
+app.use(
+  cors({
+    origin: 'https://email-front-kappa.vercel.app', // Replace with your frontend's URL
+    methods: ['POST'],
+    allowedHeaders: ['Content-Type'],
+  })
+);
+
 app.use(bodyParser.json());
 
 // Email Configuration
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Use environment variables
+    user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
@@ -21,9 +32,10 @@ app.post('/send-email', async (req, res) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: 'norven.norov@gmail.com', 
-      subject: `Message from ${email}`,
+      subject: `My email is ${email}`,
       text: message,
     });
+
     res.status(200).json({ message: 'Email sent successfully!' });
   } catch (error) {
     console.error(error);
