@@ -6,14 +6,14 @@ const nodemailer = require('nodemailer');
 const app = express();
 
 // Enable CORS
-app.use(cors()); // Allow all origins
-// app.use(
-//   cors({
-//     origin: 'https://email-front-kappa.vercel.app', // Replace with your frontend's URL
-//     methods: ['POST'],
-//     allowedHeaders: ['Content-Type'],
-//   })
-// );
+// app.use(cors()); // Allow all origins
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://email-front-kappa.vercel.app'],
+  methods: ['POST'],
+  allowedHeaders: ['Content-Type'],
+}));
+
+app.options('/send-email', cors()); // Handle OPTIONS preflight request
 
 app.use(bodyParser.json());
 
